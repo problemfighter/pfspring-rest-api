@@ -33,6 +33,7 @@ dependencies {
             implementation project(":" + it)
         }
     }
+    implementation "io.springfox:springfox-boot-starter:$swaggerVersion"
     implementation "io.springfox:springfox-boot-starter:${swaggerVersion}"
     implementation "io.springfox:springfox-swagger-ui:${swaggerVersion}"
 }
