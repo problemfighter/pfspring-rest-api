@@ -43,16 +43,24 @@ public class DataUtil {
         return response;
     }
 
-    public <D> List<D> markAsDeleted(List<D> dataList) {
+    public <D> List<D> markAsDeletedFlag(List<D> dataList, Boolean isDeleted) {
         for (D data: dataList){
-            markAsDeleted(data);
+            markAsDeletedFlag(data, isDeleted);
         }
         return dataList;
     }
 
     public <D> Iterable<D> markAsDeleted(Iterable<D> dataList) {
+        return markAsDeletedFlag(dataList, true);
+    }
+
+    public <D> Iterable<D> markAsUndeleted(Iterable<D> dataList) {
+        return markAsDeletedFlag(dataList, false);
+    }
+
+    private  <D> Iterable<D> markAsDeletedFlag(Iterable<D> dataList, Boolean isDeleted) {
         for (D data : dataList) {
-            markAsDeleted(data);
+            markAsDeletedFlag(data, isDeleted);
         }
         return dataList;
     }
@@ -86,7 +94,7 @@ public class DataUtil {
             if (source != null) {
                 try {
                     bulkErrorValidEntities.addToList(reqProcessor.copySrcToDstValidate(source, entity));
-                } catch (ApiProcessorException e) {
+                } catch (ApiRestException e) {
                     MessageResponse messageResponse = (MessageResponse) e.getError();
                     bulkErrorValidEntities.addFailed(new BulkErrorData<D>().addError(messageResponse.error).addObject(source));
                 }
@@ -101,9 +109,16 @@ public class DataUtil {
         return bulkErrorValidEntities;
     }
 
+    private  <D> D markAsDeletedFlag(D data, Boolean isDeleted) {
+        return updateProperty(data, Map.of("isDeleted", isDeleted));
+    }
+
+    public <D> D markAsUndeleted(D data) {
+        return markAsDeletedFlag(data, false);
+    }
 
     public <D> D markAsDeleted(D data) {
-        return updateProperty(data, Map.of("isDeleted", true));
+        return markAsDeletedFlag(data, true);
     }
 
     public <D> List<D> updateProperty(List<D> dataList, Map<String, Object> fieldValue) {
@@ -126,6 +141,15 @@ public class DataUtil {
             }
         }
         return data;
+    }
+
+    public <E> E validateAndOptionToEntity(Optional<E> optional, String message) {
+        if (optional.isPresent()) {
+            return optional.get();
+        } else if (message != null) {
+            ApiRestException.error(message);
+        }
+        return null;
     }
 
     public static DataUtil instance() {

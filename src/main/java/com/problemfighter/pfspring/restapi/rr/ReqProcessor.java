@@ -7,7 +7,7 @@ import com.problemfighter.java.oc.common.ProcessCustomCopy;
 import com.problemfighter.java.oc.copier.ObjectCopier;
 import com.problemfighter.java.oc.reflection.ReflectionProcessor;
 import com.problemfighter.pfspring.common.common.SpringContext;
-import com.problemfighter.pfspring.restapi.common.ApiProcessorException;
+import com.problemfighter.pfspring.restapi.common.ApiRestException;
 import com.problemfighter.pfspring.restapi.rr.request.RequestBulkData;
 import com.problemfighter.pfspring.restapi.rr.request.RequestData;
 import com.problemfighter.pfspring.restapi.rr.response.BulkErrorData;
@@ -43,7 +43,7 @@ public class ReqProcessor {
         try {
             return this.objectCopier.copy(source, destination);
         } catch (ObjectCopierException e) {
-            ApiProcessorException.otherError(e.getMessage());
+            ApiRestException.otherError(e.getMessage());
         }
         return null;
     }
@@ -52,7 +52,7 @@ public class ReqProcessor {
         try {
             return this.objectCopier.copy(source, destination);
         } catch (ObjectCopierException e) {
-            ApiProcessorException.otherError(e.getMessage());
+            ApiRestException.otherError(e.getMessage());
         }
         return null;
     }
@@ -60,7 +60,7 @@ public class ReqProcessor {
     public Boolean dataValidate(Object source) {
         LinkedHashMap<String, String> errors = this.objectCopier.validateObject(source);
         if (errors.size() != 0) {
-            ApiProcessorException.throwException(ResProcessor.validationError().reason(errors));
+            ApiRestException.throwException(ResProcessor.validationError().reason(errors));
             return false;
         }
         return true;
@@ -87,11 +87,11 @@ public class ReqProcessor {
         return new ReqProcessor();
     }
 
-    public <D> D copyOnly(Object source, Class<D> destination) throws ApiProcessorException {
+    public <D> D copyOnly(Object source, Class<D> destination) throws ApiRestException {
         return copySrcToDst(source, destination);
     }
 
-    public <D> D copyOnly(Object source, D destination) throws ApiProcessorException {
+    public <D> D copyOnly(Object source, D destination) throws ApiRestException {
         return copySrcToDst(source, destination);
     }
 
@@ -117,7 +117,7 @@ public class ReqProcessor {
         for (D object : requestData.getData()) {
             try {
                 errorDst.addToList(copySrcToDstValidate(object, destination));
-            } catch (ApiProcessorException e) {
+            } catch (ApiRestException e) {
                 MessageResponse messageResponse = (MessageResponse) e.getError();
                 errorDst.addFailed(new BulkErrorData<D>().addError(messageResponse.error).addObject(object));
             }
@@ -127,7 +127,7 @@ public class ReqProcessor {
 
     public <O> Long validateId(Long id, String message) {
         if (id == null && message != null) {
-            ApiProcessorException.error(message);
+            ApiRestException.error(message);
         }
         return id;
     }
@@ -139,15 +139,6 @@ public class ReqProcessor {
     public <O> Long validateNGetId(RequestData<O> data, String message) {
         Long id = getIdFieldValue(data.getData());
         return validateId(id, message);
-    }
-
-    public <E> E validateNOp2Entity(Optional<E> optional, String message) {
-        if (optional.isPresent()) {
-            return optional.get();
-        } else if (message != null) {
-            ApiProcessorException.error(message);
-        }
-        return null;
     }
 
     public <O> Long getIdFieldValue(O object) {

@@ -5,19 +5,19 @@ import com.problemfighter.pfspring.restapi.rr.ResProcessor;
 /**
  * Created by Touhid Mia on 11/09/2014.
  */
-public class ApiProcessorException extends RuntimeException {
+public class ApiRestException extends RuntimeException {
 
     public Object errorMessage;
 
-    public ApiProcessorException() {
+    public ApiRestException() {
         super("Api Processor Exception");
     }
 
-    public ApiProcessorException(String message) {
+    public ApiRestException(String message) {
         super(message);
     }
 
-    public ApiProcessorException error(Object errorMessage) {
+    public ApiRestException error(Object errorMessage) {
         this.errorMessage = errorMessage;
         return this;
     }
@@ -29,8 +29,8 @@ public class ApiProcessorException extends RuntimeException {
         return this.errorMessage;
     }
 
-    public static void throwException(Object errorMessage) throws ApiProcessorException {
-        throw new ApiProcessorException().error(errorMessage);
+    public static void throwException(Object errorMessage) throws ApiRestException {
+        throw new ApiRestException().error(errorMessage);
     }
 
     public static void notFound() {
