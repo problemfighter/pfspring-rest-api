@@ -1,6 +1,6 @@
 package com.problemfighter.pfspring.restapi.exception;
 
-import com.problemfighter.pfspring.restapi.rr.ResProcessor;
+import com.problemfighter.pfspring.restapi.rr.ResponseProcessor;
 import com.problemfighter.pfspring.restapi.rr.response.MessageResponse;
 import org.springframework.http.HttpStatus;
 
@@ -22,17 +22,17 @@ public class HttpToApiException {
     public MessageResponse processError(HttpServletRequest request) {
         int statusCode = getResponseCode(request);
         if (statusCode == HttpStatus.NOT_FOUND.value()) {
-            return ResProcessor.notFound();
+            return ResponseProcessor.notFound();
         } else if (statusCode == HttpStatus.BAD_REQUEST.value()) {
-            return ResProcessor.badRequest();
+            return ResponseProcessor.badRequest();
         } else if (statusCode == HttpStatus.UNAUTHORIZED.value()) {
-            return ResProcessor.unauthorized();
+            return ResponseProcessor.unauthorized();
         } else if (statusCode == HttpStatus.FORBIDDEN.value()) {
-            return ResProcessor.forbidden();
+            return ResponseProcessor.forbidden();
         } else if (statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
-            return ResProcessor.codeError();
+            return ResponseProcessor.codeError();
         }
-        return ResProcessor.unknownError();
+        return ResponseProcessor.unknownError();
     }
 
     public static MessageResponse handleException(HttpServletRequest request) {

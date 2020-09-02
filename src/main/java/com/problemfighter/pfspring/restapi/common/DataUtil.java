@@ -1,7 +1,7 @@
 package com.problemfighter.pfspring.restapi.common;
 
 import com.problemfighter.java.oc.reflection.ReflectionProcessor;
-import com.problemfighter.pfspring.restapi.rr.ReqProcessor;
+import com.problemfighter.pfspring.restapi.rr.RequestProcessor;
 import com.problemfighter.pfspring.restapi.rr.request.RequestBulkData;
 import com.problemfighter.pfspring.restapi.rr.response.*;
 
@@ -11,11 +11,11 @@ import java.util.*;
 public class DataUtil {
 
     private ReflectionProcessor reflectionProcessor;
-    private ReqProcessor reqProcessor;
+    private RequestProcessor requestProcessor;
 
     public DataUtil() {
         reflectionProcessor = new ReflectionProcessor();
-        reqProcessor = new ReqProcessor();
+        requestProcessor = new RequestProcessor();
     }
 
     public <D> List<Long> getAllId(RequestBulkData<D> data){
@@ -93,7 +93,7 @@ public class DataUtil {
             source = getObjectFromList(sourceList, "id", entity);
             if (source != null) {
                 try {
-                    bulkErrorValidEntities.addToList(reqProcessor.copySrcToDstValidate(source, entity));
+                    bulkErrorValidEntities.addToList(requestProcessor.copySrcToDstValidate(source, entity));
                 } catch (ApiRestException e) {
                     MessageResponse messageResponse = (MessageResponse) e.getError();
                     bulkErrorValidEntities.addFailed(new BulkErrorData<D>().addError(messageResponse.error).addObject(source));

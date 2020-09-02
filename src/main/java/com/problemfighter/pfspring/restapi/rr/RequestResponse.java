@@ -4,15 +4,15 @@ import com.problemfighter.pfspring.restapi.common.DataUtil;
 
 public interface RequestResponse {
 
-    default ReqProcessor req() {
-        return new ReqProcessor();
+    default RequestProcessor requestProcessor() {
+        return new RequestProcessor();
     }
 
-    default ResProcessor res() {
-        return ResProcessor.instance();
+    default ResponseProcessor responseProcessor() {
+        return ResponseProcessor.instance();
     }
 
-    default DataUtil du(){
+    default DataUtil dataUtil(){
         return DataUtil.instance();
     }
 }

@@ -16,11 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class ResProcessor {
+public class ResponseProcessor {
 
     private ObjectCopier objectCopier;
 
-    public ResProcessor() {
+    public ResponseProcessor() {
         this.objectCopier = new ObjectCopier();
         this.objectCopier.initCustomProcessor = new InitCustomProcessor() {
             @Override
@@ -30,8 +30,8 @@ public class ResProcessor {
         };
     }
 
-    public static ResProcessor instance() {
-        return new ResProcessor();
+    public static ResponseProcessor instance() {
+        return new ResponseProcessor();
     }
 
     public MessageResponse responseMessage(String message, String errorCode) {

@@ -1,6 +1,6 @@
 package com.problemfighter.pfspring.restapi.common;
 
-import com.problemfighter.pfspring.restapi.rr.ResProcessor;
+import com.problemfighter.pfspring.restapi.rr.ResponseProcessor;
 
 /**
  * Created by Touhid Mia on 11/09/2014.
@@ -24,7 +24,7 @@ public class ApiRestException extends RuntimeException {
 
     public Object getError() {
         if (this.errorMessage == null) {
-            return ResProcessor.unknownError();
+            return ResponseProcessor.unknownError();
         }
         return this.errorMessage;
     }
@@ -34,18 +34,18 @@ public class ApiRestException extends RuntimeException {
     }
 
     public static void notFound() {
-        throwException(ResProcessor.notFound());
+        throwException(ResponseProcessor.notFound());
     }
 
     public static void unauthorized() {
-        throwException(ResProcessor.unauthorized());
+        throwException(ResponseProcessor.unauthorized());
     }
 
     public static void otherError(String errorMessage) {
-        throwException(ResProcessor.otherError(errorMessage));
+        throwException(ResponseProcessor.otherError(errorMessage));
     }
 
     public static void error(String message) {
-        throwException(ResProcessor.errorMessage(message));
+        throwException(ResponseProcessor.errorMessage(message));
     }
 }

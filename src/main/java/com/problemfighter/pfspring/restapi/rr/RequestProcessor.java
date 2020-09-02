@@ -18,9 +18,8 @@ import org.springframework.data.domain.Sort;
 
 import java.lang.reflect.Field;
 import java.util.LinkedHashMap;
-import java.util.Optional;
 
-public class ReqProcessor {
+public class RequestProcessor {
 
     private ObjectCopier objectCopier;
     private ReflectionProcessor reflectionProcessor;
@@ -28,7 +27,7 @@ public class ReqProcessor {
     public static String sortField = "id";
     public static Sort.Direction sortOrder = Sort.Direction.DESC;
 
-    public ReqProcessor() {
+    public RequestProcessor() {
         this.objectCopier = new ObjectCopier();
         this.objectCopier.initCustomProcessor = new InitCustomProcessor() {
             @Override
@@ -60,7 +59,7 @@ public class ReqProcessor {
     public Boolean dataValidate(Object source) {
         LinkedHashMap<String, String> errors = this.objectCopier.validateObject(source);
         if (errors.size() != 0) {
-            ApiRestException.throwException(ResProcessor.validationError().reason(errors));
+            ApiRestException.throwException(ResponseProcessor.validationError().reason(errors));
             return false;
         }
         return true;
@@ -83,8 +82,8 @@ public class ReqProcessor {
     }
 
     // Quick Access
-    public static ReqProcessor instance() {
-        return new ReqProcessor();
+    public static RequestProcessor instance() {
+        return new RequestProcessor();
     }
 
     public <D> D copyOnly(Object source, Class<D> destination) throws ApiRestException {

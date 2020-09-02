@@ -1,7 +1,7 @@
 package com.problemfighter.pfspring.restapi.exception;
 
 import com.problemfighter.pfspring.common.common.SpringContext;
-import com.problemfighter.pfspring.restapi.rr.ResProcessor;
+import com.problemfighter.pfspring.restapi.rr.ResponseProcessor;
 import com.problemfighter.pfspring.restapi.rr.response.MessageResponse;
 import org.hibernate.HibernateException;
 import org.springframework.core.env.Environment;
@@ -49,7 +49,7 @@ public class ExceptionProcessor {
         if (eng() != null && eng().equals("local")) {
             exception.printStackTrace();
         }
-        MessageResponse messageResponse = ResProcessor.errorMessage(message).setCode(code);
+        MessageResponse messageResponse = ResponseProcessor.errorMessage(message).setCode(code);
         messageResponse.updateErrorMessageKey(null);
         return messageResponse;
     }
