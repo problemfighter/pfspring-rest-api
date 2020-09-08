@@ -7,7 +7,6 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.LinkedHashMap;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@ApiModel(value = "error", description = "status error response")
 public class ErrorData {
 
     public I18nMessage message;

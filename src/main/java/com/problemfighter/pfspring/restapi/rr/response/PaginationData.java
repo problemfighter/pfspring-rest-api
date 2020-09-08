@@ -3,7 +3,6 @@ package com.problemfighter.pfspring.restapi.rr.response;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 
-@ApiModel(value = "pagination")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PaginationData {
     public Long total;

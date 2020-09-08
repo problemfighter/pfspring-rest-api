@@ -8,7 +8,6 @@ import java.util.LinkedHashMap;
 
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@ApiModel(value = "message", description = "status success response")
 public class MessageResponse extends ErrorAndBaseData {
     public I18nMessage message = null;
 
