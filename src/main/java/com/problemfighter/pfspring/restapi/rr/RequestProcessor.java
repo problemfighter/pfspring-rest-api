@@ -6,8 +6,8 @@ import com.problemfighter.java.oc.common.ObjectCopierException;
 import com.problemfighter.java.oc.common.ProcessCustomCopy;
 import com.problemfighter.java.oc.copier.ObjectCopier;
 import com.problemfighter.java.oc.reflection.ReflectionProcessor;
-import com.problemfighter.pfspring.common.common.SpringContext;
 import com.problemfighter.pfspring.restapi.common.ApiRestException;
+import com.problemfighter.pfspring.restapi.common.RestSpringContext;
 import com.problemfighter.pfspring.restapi.rr.request.RequestBulkData;
 import com.problemfighter.pfspring.restapi.rr.request.RequestData;
 import com.problemfighter.pfspring.restapi.rr.response.BulkErrorData;
@@ -32,7 +32,7 @@ public class RequestProcessor {
         this.objectCopier.initCustomProcessor = new InitCustomProcessor() {
             @Override
             public <S, D> ProcessCustomCopy<S, D> init(Class<?> klass, S source, D destination) {
-                return (ProcessCustomCopy<S, D>) SpringContext.getBean(klass);
+                return (ProcessCustomCopy<S, D>) RestSpringContext.getBean(klass);
             }
         };
         this.reflectionProcessor = new ReflectionProcessor();

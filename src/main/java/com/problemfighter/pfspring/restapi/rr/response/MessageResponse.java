@@ -2,8 +2,6 @@ package com.problemfighter.pfspring.restapi.rr.response;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import io.swagger.annotations.ApiModel;
-
 import java.util.LinkedHashMap;
 
 

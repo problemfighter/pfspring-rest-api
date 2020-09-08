@@ -5,7 +5,7 @@ import com.problemfighter.java.oc.common.InitCustomProcessor;
 import com.problemfighter.java.oc.common.ObjectCopierException;
 import com.problemfighter.java.oc.common.ProcessCustomCopy;
 import com.problemfighter.java.oc.copier.ObjectCopier;
-import com.problemfighter.pfspring.common.common.SpringContext;
+import com.problemfighter.pfspring.restapi.common.RestSpringContext;
 import com.problemfighter.pfspring.restapi.exception.ErrorCode;
 import com.problemfighter.pfspring.restapi.exception.ExceptionMessage;
 import com.problemfighter.pfspring.restapi.rr.response.*;
@@ -25,7 +25,7 @@ public class ResponseProcessor {
         this.objectCopier.initCustomProcessor = new InitCustomProcessor() {
             @Override
             public <S, D> ProcessCustomCopy<S, D> init(Class<?> klass, S source, D destination) {
-                return (ProcessCustomCopy<S, D>) SpringContext.getBean(klass);
+                return (ProcessCustomCopy<S, D>) RestSpringContext.getBean(klass);
             }
         };
     }
