@@ -7,7 +7,7 @@ import com.problemfighter.pfspring.restapi.rr.response.DetailsResponse;
 import com.problemfighter.pfspring.restapi.rr.response.MessageResponse;
 import com.problemfighter.pfspring.restapi.rr.response.PageableResponse;
 
-public interface MethodStructure<M, D, U> {
+public interface RestApiAction<M, D, U> {
 
     MessageResponse create(RequestData<D> data);
     BulkResponse<D> bulkCreate(RequestBulkData<D> data);
