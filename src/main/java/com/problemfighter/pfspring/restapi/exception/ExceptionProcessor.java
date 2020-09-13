@@ -44,7 +44,7 @@ public class ExceptionProcessor {
 
     public MessageResponse handleException(Exception exception) {
         String message = exception.getMessage();
-        String code = ErrorCode.unknownError;
+        String code = ResponseCode.unknownError;
         message = exceptionMessageGenerator(exception, message);
         if (eng() != null && eng().equals("local")) {
             exception.printStackTrace();

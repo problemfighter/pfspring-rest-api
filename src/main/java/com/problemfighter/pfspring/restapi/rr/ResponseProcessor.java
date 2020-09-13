@@ -6,7 +6,7 @@ import com.problemfighter.java.oc.common.ObjectCopierException;
 import com.problemfighter.java.oc.common.ProcessCustomCopy;
 import com.problemfighter.java.oc.copier.ObjectCopier;
 import com.problemfighter.pfspring.restapi.common.RestSpringContext;
-import com.problemfighter.pfspring.restapi.exception.ErrorCode;
+import com.problemfighter.pfspring.restapi.exception.ResponseCode;
 import com.problemfighter.pfspring.restapi.exception.ExceptionMessage;
 import com.problemfighter.pfspring.restapi.rr.response.*;
 import org.springframework.data.domain.Page;
@@ -30,76 +30,12 @@ public class ResponseProcessor {
         };
     }
 
-    public static ResponseProcessor instance() {
-        return new ResponseProcessor();
-    }
-
-    public MessageResponse responseMessage(String message, String errorCode) {
-        return responseMessage(message, errorCode, null).status(Status.success);
-    }
-
-    public MessageResponse responseMessage(String message, String errorCode, ErrorData error) {
+    private MessageResponse responseMessage(String message, String errorCode, ErrorData error) {
         MessageResponse messageResponse = new MessageResponse();
         messageResponse.message = I18nMessage.message(message);
         messageResponse.code = errorCode;
         messageResponse.error = error;
         return messageResponse;
-    }
-
-    public MessageResponse errorMessageResponse(String message, String errorCode) {
-        return responseMessage(null, errorCode).errorMessage(message).status(Status.error);
-    }
-
-    public MessageResponse successMessage(String message) {
-        return instance().responseMessage(message, ErrorCode.success);
-    }
-
-    // Quick Access
-    public static MessageResponse messageResponse(String message, String errorCode) {
-        return instance().responseMessage(message, errorCode);
-    }
-
-
-    public static MessageResponse errorMessage(String message) {
-        return instance().errorMessageResponse(message, ErrorCode.error);
-    }
-
-
-    public static MessageResponse unknownError() {
-        return instance().errorMessageResponse(ExceptionMessage.unknownError, ErrorCode.unknownError);
-    }
-
-
-    public static MessageResponse notFound() {
-        return errorMessage(ExceptionMessage.notFound).setCode(ErrorCode.notFound);
-    }
-
-    public static MessageResponse badRequest() {
-        return errorMessage(ExceptionMessage.badRequest).setCode(ErrorCode.badRequest);
-    }
-
-    public static MessageResponse unauthorized() {
-        return errorMessage(ExceptionMessage.unauthorized).setCode(ErrorCode.unauthorized);
-    }
-
-    public static MessageResponse forbidden() {
-        return errorMessage(ExceptionMessage.forbidden).setCode(ErrorCode.forbidden);
-    }
-
-    public static MessageResponse codeError() {
-        return errorMessage(ExceptionMessage.codeError).setCode(ErrorCode.codeError);
-    }
-
-    public static MessageResponse validationError() {
-        return errorMessage(ExceptionMessage.validationError, ErrorCode.validationError);
-    }
-
-    public static MessageResponse otherError(String message) {
-        return errorMessage(message, ErrorCode.otherError);
-    }
-
-    public static MessageResponse errorMessage(String message, String errorCode) {
-        return instance().errorMessageResponse(message, errorCode);
     }
 
     private <E, D> D convertEntityToDTO(E entity, Class<D> dto) throws ObjectCopierException {
@@ -146,35 +82,17 @@ public class ResponseProcessor {
         return entity;
     }
 
-    // ===================================================== ALL Public Method ============================================================================
+    // ===================================================== Refined Codes ============================================================================
 
-    public <E, D> D entityToDTO(E entity, Class<D> dto) {
-        try {
-            return convertEntityToDTO(entity, dto);
-        } catch (ObjectCopierException ignore) {
-            return null;
-        }
+    public MessageResponse response(String message, String errorCode) {
+        return responseMessage(message, errorCode, null).status(Status.success);
     }
 
-    public <D> BulkResponse<D> bulkResponse(BulkErrorValidEntities<D, ?> processed, Class<D> dto) {
-        BulkResponse<D> bulkResponse = new BulkResponse<>();
-        processed.addSuccessDataList(entityToDTO(processed.entityList, dto));
-        bulkResponse.status = Status.partial;
-        bulkResponse.code = ErrorCode.partial;
-        if (processed.success == null || processed.success.size() == 0) {
-            bulkResponse.status = Status.error;
-            bulkResponse.code = ErrorCode.error;
-            processed.success = null;
-        } else if (processed.failed == null) {
-            bulkResponse.status = Status.success;
-            bulkResponse.code = ErrorCode.success;
-        }
-        bulkResponse.success = processed.success;
-        bulkResponse.failed = processed.failed;
-        return bulkResponse;
+    public MessageResponse response(String message) {
+        return response(message, ResponseCode.success);
     }
 
-    public <E, D> PageableResponse<D> pageableResponse(Page<E> page, Class<D> dto) {
+    public <E, D> PageableResponse<D> response(Page<E> page, Class<D> dto) {
         PageableResponse<D> pageableResponse = new PageableResponse<>();
         pageableResponse.data = entityToDTO(page.getContent(), dto);
         Pageable pageable = page.getPageable();
@@ -185,7 +103,7 @@ public class ResponseProcessor {
         return pageableResponse;
     }
 
-    public <E, D> DetailsResponse<D> detailsResponse(E source, Class<D> dto, String message) {
+    public <E, D> DetailsResponse<D> response(E source, Class<D> dto, String message) {
         DetailsResponse<D> detailsResponse = new DetailsResponse<>();
         try {
             source = getEntityValue(source);
@@ -203,8 +121,89 @@ public class ResponseProcessor {
         return detailsResponse;
     }
 
-    public <E, D> DetailsResponse<D> detailsResponse(E source, Class<D> dto) {
-        return detailsResponse(source, dto, null);
+    public <E, D> DetailsResponse<D> response(E source, Class<D> dto) {
+        return response(source, dto, null);
+    }
+
+    public <D> BulkResponse<D> response(BulkErrorValidEntities<D, ?> processed, Class<D> dto) {
+        BulkResponse<D> bulkResponse = new BulkResponse<>();
+        processed.addSuccessDataList(entityToDTO(processed.entityList, dto));
+        bulkResponse.status = Status.partial;
+        bulkResponse.code = ResponseCode.partial;
+        if (processed.success == null || processed.success.size() == 0) {
+            bulkResponse.status = Status.error;
+            bulkResponse.code = ResponseCode.error;
+            processed.success = null;
+        } else if (processed.failed == null) {
+            bulkResponse.status = Status.success;
+            bulkResponse.code = ResponseCode.success;
+        }
+        bulkResponse.success = processed.success;
+        bulkResponse.failed = processed.failed;
+        return bulkResponse;
+    }
+
+    public static ResponseProcessor instance() {
+        return new ResponseProcessor();
+    }
+
+    public <E, D> D entityToDTO(E entity, Class<D> dto) {
+        try {
+            return convertEntityToDTO(entity, dto);
+        } catch (ObjectCopierException ignore) {
+            return null;
+        }
+    }
+
+    public MessageResponse error(String message, String errorCode) {
+        return response(null, errorCode).errorMessage(message).status(Status.error);
+    }
+
+    public MessageResponse error(String message) {
+        return error(message, ResponseCode.error);
+    }
+
+
+    // ===================================================== Static Methods ============================================================================
+
+    public static MessageResponse unknownError() {
+        return instance().error(ExceptionMessage.unknownError, ResponseCode.unknownError);
+    }
+
+    public static MessageResponse notFound() {
+        return errorMessage(ExceptionMessage.notFound).setCode(ResponseCode.notFound);
+    }
+
+    public static MessageResponse badRequest() {
+        return errorMessage(ExceptionMessage.badRequest).setCode(ResponseCode.badRequest);
+    }
+
+    public static MessageResponse unauthorized() {
+        return errorMessage(ExceptionMessage.unauthorized).setCode(ResponseCode.unauthorized);
+    }
+
+    public static MessageResponse forbidden() {
+        return errorMessage(ExceptionMessage.forbidden).setCode(ResponseCode.forbidden);
+    }
+
+    public static MessageResponse codeError() {
+        return errorMessage(ExceptionMessage.codeError).setCode(ResponseCode.codeError);
+    }
+
+    public static MessageResponse validationError() {
+        return instance().error(ExceptionMessage.validationError, ResponseCode.validationError);
+    }
+
+    public static MessageResponse errorMessage(String message) {
+        return instance().error(message, ResponseCode.error);
+    }
+
+    public static MessageResponse successMessage(String message) {
+        return instance().response(message, ResponseCode.success);
+    }
+
+    public static MessageResponse otherError(String message) {
+        return errorMessage(message).setCode(ResponseCode.otherError);
     }
 
 }

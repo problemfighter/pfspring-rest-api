@@ -1,6 +1,6 @@
 package com.problemfighter.pfspring.restapi.exception;
 
-public final class ErrorCode {
+public final class ResponseCode {
 
     public static final String success = "1200";
     public static final String partial = "1212";
