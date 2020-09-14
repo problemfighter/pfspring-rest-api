@@ -111,7 +111,7 @@ public class RequestProcessor {
     }
 
 
-    public <D, E> BulkErrorValidEntities<D, E> bulkProcess(RequestBulkData<D> requestData, Class<E> destination) {
+    public <D, E> BulkErrorValidEntities<D, E> process(RequestBulkData<D> requestData, Class<E> destination) {
         BulkErrorValidEntities<D, E> errorDst = new BulkErrorValidEntities<>();
         for (D object : requestData.getData()) {
             try {
@@ -122,6 +122,10 @@ public class RequestProcessor {
             }
         }
         return errorDst;
+    }
+
+    public <O> Long validateId(RequestData<O> data, String message) {
+        return validateId(getId(data), message);
     }
 
     public <O> Long validateId(Long id, String message) {

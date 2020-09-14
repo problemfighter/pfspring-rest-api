@@ -16,4 +16,12 @@ public class BulkErrorValidEntities<D, E> extends BulkResponse<D> {
         return this;
     }
 
+    public Boolean isValidEntities() {
+        return entityList.size() != 0;
+    }
+
+    public List<E> getEntities() {
+        return this.entityList;
+    }
+
 }

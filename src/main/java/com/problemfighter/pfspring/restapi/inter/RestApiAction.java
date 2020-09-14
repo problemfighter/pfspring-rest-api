@@ -9,16 +9,16 @@ import com.problemfighter.pfspring.restapi.rr.response.PageableResponse;
 
 public interface RestApiAction<M, D, U> {
 
-    MessageResponse create(RequestData<D> data);
-    BulkResponse<D> bulkCreate(RequestBulkData<D> data);
-    PageableResponse<M> list(Integer page, Integer size, String sort, String field, String search);
-    PageableResponse<D> detailList(Integer page, Integer size, String sort, String field, String search);
-    PageableResponse<M> trash(Integer page, Integer size, String sort, String field, String search);
-    DetailsResponse<D> details(Long id);
-    MessageResponse update(RequestData<U> data);
-    BulkResponse<U> bulkUpdate(RequestBulkData<U> data);
-    MessageResponse bulkDelete(RequestBulkData<Long> data);
-    MessageResponse hardDelete(RequestBulkData<Long> data);
-    MessageResponse delete(Long id);
-    MessageResponse bulkRestore(RequestBulkData<Long> data);
+    default MessageResponse create(RequestData<D> data){return null;}
+    default BulkResponse<D> bulkCreate(RequestBulkData<D> data){return null;}
+    default PageableResponse<M> list(Integer page, Integer size, String sort, String field, String search){return null;}
+    default PageableResponse<D> detailList(Integer page, Integer size, String sort, String field, String search){return null;}
+    default PageableResponse<M> trash(Integer page, Integer size, String sort, String field, String search){return null;}
+    default DetailsResponse<D> details(Long id){return null;}
+    default MessageResponse update(RequestData<U> data){return null;}
+    default BulkResponse<U> bulkUpdate(RequestBulkData<U> data){return null;}
+    default MessageResponse bulkDelete(RequestBulkData<Long> data){return null;}
+    default MessageResponse hardDelete(RequestBulkData<Long> data){return null;}
+    default MessageResponse delete(Long id){return null;}
+    default MessageResponse bulkRestore(RequestBulkData<Long> data){return null;}
 }
