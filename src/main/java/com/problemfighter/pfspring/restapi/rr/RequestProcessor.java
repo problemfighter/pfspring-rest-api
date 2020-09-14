@@ -38,7 +38,7 @@ public class RequestProcessor {
         this.reflectionProcessor = new ReflectionProcessor();
     }
 
-    public <D> D copySrcToDst(Object source, D destination) {
+    private  <D> D copySrcToDst(Object source, D destination) {
         try {
             return this.objectCopier.copy(source, destination);
         } catch (ObjectCopierException e) {
@@ -47,13 +47,46 @@ public class RequestProcessor {
         return null;
     }
 
-    public <D> D copySrcToDst(Object source, Class<D> destination) {
+    private <D> D copySrcToDst(Object source, Class<D> destination) {
         try {
             return this.objectCopier.copy(source, destination);
         } catch (ObjectCopierException e) {
             ApiRestException.otherError(e.getMessage());
         }
         return null;
+    }
+
+    private <T, O> T getFieldValue(O object, String name, Class<T> type) {
+        try {
+            Field field = reflectionProcessor.getFieldFromObject(object, name);
+            if (field == null || field.getType() != type) {
+                return null;
+            }
+            return (T) field.get(object);
+        } catch (IllegalAccessException ignore) {
+            return null;
+        }
+    }
+
+
+    public <D> D copySrcToDstValidate(Object source, Class<D> destination) {
+        dataValidate(source);
+        return copySrcToDst(source, destination);
+    }
+
+    public  <D> D copySrcToDstValidate(Object source, D destination) {
+        if (dataValidate(source)) {
+            return copySrcToDst(source, destination);
+        }
+        return null;
+    }
+
+    public <D> D copyOnly(Object source, Class<D> destination) throws ApiRestException {
+        return copySrcToDst(source, destination);
+    }
+
+    public <D> D copyOnly(Object source, D destination) throws ApiRestException {
+        return copySrcToDst(source, destination);
     }
 
     public Boolean dataValidate(Object source) {
@@ -65,33 +98,8 @@ public class RequestProcessor {
         return true;
     }
 
-    public void dataValidate(RequestData<?> requestData) {
+    public <D> void dataValidate(RequestData<D> requestData) {
         dataValidate(requestData.getData());
-    }
-
-    public <D> D copySrcToDstValidate(Object source, Class<D> destination) {
-        dataValidate(source);
-        return copySrcToDst(source, destination);
-    }
-
-    public <D> D copySrcToDstValidate(Object source, D destination) {
-        if (dataValidate(source)) {
-            return copySrcToDst(source, destination);
-        }
-        return null;
-    }
-
-    // Quick Access
-    public static RequestProcessor instance() {
-        return new RequestProcessor();
-    }
-
-    public <D> D copyOnly(Object source, Class<D> destination) throws ApiRestException {
-        return copySrcToDst(source, destination);
-    }
-
-    public <D> D copyOnly(Object source, D destination) throws ApiRestException {
-        return copySrcToDst(source, destination);
     }
 
     public <D> D process(Object source, Class<D> destination) {
@@ -148,17 +156,6 @@ public class RequestProcessor {
         return getFieldValue(object, "id", Long.class);
     }
 
-    private <T, O> T getFieldValue(O object, String name, Class<T> type) {
-        try {
-            Field field = reflectionProcessor.getFieldFromObject(object, name);
-            if (field == null || field.getType() != type) {
-                return null;
-            }
-            return (T) field.get(object);
-        } catch (IllegalAccessException ignore) {
-            return null;
-        }
-    }
 
     public PageRequest paginationNSort(Integer page, Integer size, String sort, String field) {
         if (page == null) {
@@ -179,4 +176,7 @@ public class RequestProcessor {
         return PageRequest.of(page, size, order, field);
     }
 
+    public static RequestProcessor instance() {
+        return new RequestProcessor();
+    }
 }

@@ -18,6 +18,10 @@ public class DataUtil {
         requestProcessor = new RequestProcessor();
     }
 
+    private  <D> D markAsDeletedFlag(D data, Boolean isDeleted) {
+        return updateProperty(data, Map.of("isDeleted", isDeleted));
+    }
+
     public <D> List<Long> getAllId(RequestBulkData<D> data){
         return getAllId(data.getData());
     }
@@ -122,10 +126,6 @@ public class DataUtil {
             bulkErrorValidEntities.addFailed(new BulkErrorData<D>().addError(error).addObject(errorSource));
         }
         return bulkErrorValidEntities;
-    }
-
-    private  <D> D markAsDeletedFlag(D data, Boolean isDeleted) {
-        return updateProperty(data, Map.of("isDeleted", isDeleted));
     }
 
     public <D> D markAsUndeleted(D data) {

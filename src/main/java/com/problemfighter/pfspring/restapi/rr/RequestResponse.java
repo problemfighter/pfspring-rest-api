@@ -12,7 +12,7 @@ public interface RequestResponse {
         return ResponseProcessor.instance();
     }
 
-    default DataUtil dataUtil(){
+    default DataUtil dataUtil() {
         return DataUtil.instance();
     }
 }
