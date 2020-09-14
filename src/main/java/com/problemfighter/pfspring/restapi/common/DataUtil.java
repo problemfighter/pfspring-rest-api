@@ -65,6 +65,21 @@ public class DataUtil {
         return dataList;
     }
 
+    public <D> Boolean isEmpty(Iterable<D> iterable) {
+        return size(iterable) == 0;
+    }
+
+    public <D> Integer size(Iterable<D> iterable) {
+        if (iterable instanceof Collection) {
+            return ((Collection<?>) iterable).size();
+        }
+        Integer counter = 0;
+        for (Object i : iterable) {
+            counter++;
+        }
+        return counter;
+    }
+
     public <D> D getObjectFromList(List<D> dataList, String fieldName, Object dataObject) {
         Field listField, dataField;
         for (D data : dataList) {

@@ -26,7 +26,6 @@ ext {
 
 def dependencyList = [
         "pf-java-object-copier",
-        "pfspring-common",
 ]
 
 dependencies {
