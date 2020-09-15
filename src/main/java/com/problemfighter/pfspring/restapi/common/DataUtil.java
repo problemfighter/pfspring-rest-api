@@ -22,6 +22,13 @@ public class DataUtil {
         return updateProperty(data, Map.of("isDeleted", isDeleted));
     }
 
+    private  <D> Iterable<D> markAsDeletedFlag(Iterable<D> dataList, Boolean isDeleted) {
+        for (D data : dataList) {
+            markAsDeletedFlag(data, isDeleted);
+        }
+        return dataList;
+    }
+
     public <D> List<Long> getAllId(RequestBulkData<D> data){
         return getAllId(data.getData());
     }
@@ -62,12 +69,6 @@ public class DataUtil {
         return markAsDeletedFlag(dataList, false);
     }
 
-    private  <D> Iterable<D> markAsDeletedFlag(Iterable<D> dataList, Boolean isDeleted) {
-        for (D data : dataList) {
-            markAsDeletedFlag(data, isDeleted);
-        }
-        return dataList;
-    }
 
     public <D> Boolean isEmpty(Iterable<D> iterable) {
         return size(iterable) == 0;
@@ -84,7 +85,7 @@ public class DataUtil {
         return counter;
     }
 
-    public <D> D getObjectFromList(List<D> dataList, String fieldName, Object dataObject) {
+    public <D> D getObjectFromListIfFieldValueMatch(List<D> dataList, String fieldName, Object dataObject) {
         Field listField, dataField;
         for (D data : dataList) {
             try {
@@ -109,7 +110,7 @@ public class DataUtil {
         List<D> sourceList = data.getData();
         D source;
         for (E entity : mergeTo) {
-            source = getObjectFromList(sourceList, "id", entity);
+            source = getObjectFromListIfFieldValueMatch(sourceList, "id", entity);
             if (source != null) {
                 try {
                     bulkErrorValidEntities.addToList(requestProcessor.copySrcToDstValidate(source, entity));
