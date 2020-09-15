@@ -81,14 +81,6 @@ public class RequestProcessor {
         return null;
     }
 
-    public <D> D copyOnly(Object source, Class<D> destination) throws ApiRestException {
-        return copySrcToDst(source, destination);
-    }
-
-    public <D> D copyOnly(Object source, D destination) throws ApiRestException {
-        return copySrcToDst(source, destination);
-    }
-
     public Boolean dataValidate(Object source) {
         LinkedHashMap<String, String> errors = this.objectCopier.validateObject(source);
         if (errors.size() != 0) {
