@@ -2,8 +2,10 @@ package com.problemfighter.pfspring.restapi.rr.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.io.Serializable;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class I18nMessage {
+public class I18nMessage implements Serializable {
     public String text;
     public String key;
 

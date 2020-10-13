@@ -1,6 +1,8 @@
 package com.problemfighter.pfspring.restapi.rr.request;
 
-public class RequestData<T> {
+import java.io.Serializable;
+
+public class RequestData<T> implements Serializable {
     public T data;
 
     public T getData() {
