@@ -2,8 +2,10 @@ package com.problemfighter.pfspring.restapi.rr.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.io.Serializable;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class BulkErrorData<T> {
+public class BulkErrorData<T> implements Serializable {
     public ErrorData error;
     public T object;
 

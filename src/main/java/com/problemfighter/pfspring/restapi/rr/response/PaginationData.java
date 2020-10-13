@@ -2,8 +2,10 @@ package com.problemfighter.pfspring.restapi.rr.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.io.Serializable;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class PaginationData {
+public class PaginationData implements Serializable {
     public Long total;
     public Integer totalPage;
     public Integer page;

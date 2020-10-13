@@ -2,8 +2,9 @@ package com.problemfighter.pfspring.restapi.rr.response;
 
 
 import com.problemfighter.pfspring.restapi.exception.ResponseCode;
+import java.io.Serializable;
 
-public class BaseData {
+public class BaseData  implements Serializable {
     public Status status;
     public String code;
 
