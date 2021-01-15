@@ -22,6 +22,11 @@ public class ApiRestException extends RuntimeException {
         return this;
     }
 
+    public ApiRestException errorException(String message) {
+        error(ResponseProcessor.errorMessage(message));
+        return this;
+    }
+
     public Object getError() {
         if (this.errorMessage == null) {
             return ResponseProcessor.unknownError();
