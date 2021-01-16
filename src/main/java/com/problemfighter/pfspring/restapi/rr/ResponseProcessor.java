@@ -179,7 +179,11 @@ public class ResponseProcessor {
     }
 
     public static MessageResponse unauthorized() {
-        return errorMessage(ExceptionMessage.unauthorized).setCode(ResponseCode.unauthorized);
+        return unauthorized(ExceptionMessage.unauthorized);
+    }
+
+    public static MessageResponse unauthorized(String message) {
+        return errorMessage(message).setCode(ResponseCode.unauthorized);
     }
 
     public static MessageResponse forbidden() {
