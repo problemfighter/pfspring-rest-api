@@ -90,8 +90,8 @@ public class RequestProcessor {
         return true;
     }
 
-    public <D> void dataValidate(RequestData<D> requestData) {
-        dataValidate(requestData.getData());
+    public <D> Boolean dataValidate(RequestData<D> requestData) {
+        return dataValidate(requestData.getData());
     }
 
     public <D> D process(Object source, Class<D> destination) {

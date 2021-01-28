@@ -103,6 +103,13 @@ public class ResponseProcessor {
         return pageableResponse;
     }
 
+    public <D> DetailsResponse<D> response(D object) {
+        DetailsResponse<D> detailsResponse = new DetailsResponse<>();
+        detailsResponse.data = object;
+        detailsResponse.success();
+        return detailsResponse;
+    }
+
     public <E, D> DetailsResponse<D> response(E source, Class<D> dto, String message) {
         DetailsResponse<D> detailsResponse = new DetailsResponse<>();
         try {
@@ -170,12 +177,20 @@ public class ResponseProcessor {
         return instance().error(ExceptionMessage.unknownError, ResponseCode.unknownError);
     }
 
+    public static MessageResponse notFound(String message) {
+        return errorMessage(message).setCode(ResponseCode.notFound);
+    }
+
     public static MessageResponse notFound() {
-        return errorMessage(ExceptionMessage.notFound).setCode(ResponseCode.notFound);
+        return notFound(ExceptionMessage.notFound);
+    }
+
+    public static MessageResponse badRequest(String message) {
+        return errorMessage(message).setCode(ResponseCode.badRequest);
     }
 
     public static MessageResponse badRequest() {
-        return errorMessage(ExceptionMessage.badRequest).setCode(ResponseCode.badRequest);
+        return badRequest(ExceptionMessage.badRequest);
     }
 
     public static MessageResponse unauthorized() {
@@ -186,16 +201,28 @@ public class ResponseProcessor {
         return errorMessage(message).setCode(ResponseCode.unauthorized);
     }
 
+    public static MessageResponse forbidden(String message) {
+        return errorMessage(message).setCode(ResponseCode.forbidden);
+    }
+
     public static MessageResponse forbidden() {
-        return errorMessage(ExceptionMessage.forbidden).setCode(ResponseCode.forbidden);
+        return forbidden(ExceptionMessage.forbidden);
+    }
+
+    public static MessageResponse codeError(String message) {
+        return errorMessage(message).setCode(ResponseCode.codeError);
     }
 
     public static MessageResponse codeError() {
-        return errorMessage(ExceptionMessage.codeError).setCode(ResponseCode.codeError);
+        return codeError(ExceptionMessage.codeError);
+    }
+
+    public static MessageResponse validationError(String message) {
+        return instance().error(message, ResponseCode.validationError);
     }
 
     public static MessageResponse validationError() {
-        return instance().error(ExceptionMessage.validationError, ResponseCode.validationError);
+        return validationError(ExceptionMessage.validationError);
     }
 
     public static MessageResponse errorMessage(String message) {

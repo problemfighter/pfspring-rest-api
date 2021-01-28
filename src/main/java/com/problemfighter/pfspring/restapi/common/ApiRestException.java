@@ -38,12 +38,20 @@ public class ApiRestException extends RuntimeException {
         throw new ApiRestException().error(errorMessage);
     }
 
+    public static void notFound(String message) {
+        throwException(ResponseProcessor.notFound(message));
+    }
+
     public static void notFound() {
         throwException(ResponseProcessor.notFound());
     }
 
     public static void unauthorized() {
         throwException(ResponseProcessor.unauthorized());
+    }
+
+    public static void unauthorized(String errorMessage) {
+        throwException(ResponseProcessor.unauthorized(errorMessage));
     }
 
     public static void otherError(String errorMessage) {
