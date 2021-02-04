@@ -149,6 +149,16 @@ public class RequestProcessor {
     }
 
 
+    public PageRequest paginationOnly(Integer page, Integer size) {
+        if (page == null) {
+            page = 0;
+        }
+        if (size == null) {
+            size = itemPerPage;
+        }
+        return PageRequest.of(page, size);
+    }
+
     public PageRequest paginationNSort(Integer page, Integer size, String sort, String field) {
         if (page == null) {
             page = 0;
