@@ -92,15 +92,20 @@ public class ResponseProcessor {
         return response(message, ResponseCode.success);
     }
 
-    public <E, D> PageableResponse<D> response(Page<E> page, Class<D> dto) {
+
+    public <E, D> PageableResponse<D> response(Page<E> page, List<D> data) {
         PageableResponse<D> pageableResponse = new PageableResponse<>();
-        pageableResponse.data = entityToDTO(page.getContent(), dto);
+        pageableResponse.data = data;
         Pageable pageable = page.getPageable();
         pageableResponse.addPagination(pageable.getPageNumber(), pageable.getPageSize())
                 .setTotal(page.getTotalElements())
                 .setTotalPage(page.getTotalPages());
         pageableResponse.success();
         return pageableResponse;
+    }
+
+    public <E, D> PageableResponse<D> response(Page<E> page, Class<D> dto) {
+        return this.response(page, entityToDTO(page.getContent(), dto));
     }
 
     public <D> DetailsResponse<D> response(D object) {
