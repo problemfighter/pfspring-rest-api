@@ -3,7 +3,6 @@ plugins {
     id 'java'
     id 'signing'
     id 'maven-publish'
-    id "com.jfrog.bintray" version "1.8.5"
 }
 
 apply plugin: 'org.springframework.boot'
@@ -11,18 +10,11 @@ apply plugin: 'io.spring.dependency-management'
 
 repositories {
     mavenCentral()
-    jcenter()
-    maven { url "https://dl.bintray.com/hmtmcse/maven/" }
-    maven { url "https://dl.bintray.com/problemfighter/java/" }
 }
 
 group = 'com.problemfighter.pfspring.restapi'
 version = '1.0.2'
 
-
-ext {
-    swaggerVersion = "$springfox"
-}
 
 def dependencyList = [
         "pf-java-object-copier",
@@ -41,11 +33,6 @@ dependencies {
 bootJar { enabled = false }
 jar { enabled = true }
 
-javadoc {
-    source = sourceSets.main.allJava
-    classpath = configurations.compile
-    options.addBooleanOption('html5', true)
-}
 
 task makeDoc {
     dependsOn(javadoc)
@@ -72,34 +59,28 @@ task javadocJar(type: Jar) {
     archiveClassifier = 'javadoc'
 }
 
-Boolean isPublish = true
+Boolean isPublish = false
 if (isPublish) {
-    bintray {
-
-        user = (project.hasProperty('bintrayUser') ? project.property('bintrayUser') : "hmtmcse" )
-        key =  (project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : "123" )
-        publish = true
-        override = true
-        publications = ['mavenJava']
-        pkg {
-            repo = 'java'
-            name = 'com.problemfighter.pfspring.restapi'
-            desc = 'Problem Fighter Spring Boot REST API'
-            vcsUrl = 'https://github.com/problemfighter/pfspring-rest-api.git'
-            websiteUrl = 'https://github.com/problemfighter/pfspring-rest-api'
-            issueTrackerUrl = 'https://github.com/problemfighter/pfspring-rest-api/issues'
-            licenses = ['Apache-2.0']
-        }
-    }
 
     publishing {
+
+        repositories {
+            maven {
+                credentials {
+                    username = (project.hasProperty('ossrhUsername') ? project.property('ossrhUsername') : "hmtmcse" )
+                    password = (project.hasProperty('ossrhPassword') ? project.property('ossrhPassword') : "123" )
+                }
+                url = 'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
+            }
+        }
+
         publications {
             mavenJava(MavenPublication) {
                 artifactId = 'pfspring-rest-api'
                 groupId = 'com.problemfighter.pfspring.restapi'
                 from components.java
                 artifact sourcesJar
-//                artifact javadocJar
+                artifact javadocJar
                 versionMapping {
                     usage('java-api') {
                         fromResolutionOf('runtimeClasspath')
